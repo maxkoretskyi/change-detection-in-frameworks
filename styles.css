@@ -1,0 +1,10 @@
+ul.ratings {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+
+ul.ratings > li {
+    cursor: pointer;
+    font-size: 50px;
+}
