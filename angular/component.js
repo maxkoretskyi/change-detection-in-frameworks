@@ -1,8 +1,17 @@
 const core = ng.core;
 
+// const i = core.ɵinjectChangeDetectorRef();
+
 class AppComponent {
-    constructor() {
+    constructor(cd) {
+
         this.rating = 1;
+        this.cd = cd;
+
+        setTimeout(() => {
+            this.rating = 3;
+            this.cd.markForCheck();
+        }, 3000);
     }
 
     handleClick(event) {
@@ -14,7 +23,16 @@ AppComponent.ngComponentDef = core.ɵdefineComponent({
     type: AppComponent,
     selectors: [['app-root']],
     factory: function AppComponent_Factory() {
-        return new AppComponent();
+        // doesn't work - why?
+        // return new AppComponent(core.ɵdirectiveInject(core.ChangeDetectorRef));
+
+        // my custom implementation of ChangeDetectorRef
+        const changeDetector = {};
+        const instance = new AppComponent(changeDetector);
+        changeDetector.markForCheck = () => {
+            core.ɵdetectChanges(instance);
+        };
+        return instance;
     },
     template: function AppComponent_Template(rf, ctx) {
         if (rf & 1) {
